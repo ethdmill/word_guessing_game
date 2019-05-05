@@ -2,25 +2,6 @@
 # LAPTOP GIT PATH   cd c/users/e/projects/programming/projects/python/02_word_guessing_game/main
 
 
-# TO-DO:
-
-# [x] list of words, one selected at random on program start
-# [x] collect user input for letters
-# [x] certain number of attempts (less attempts for smaller words?)
-# [x] word is shown to user as ------- with correctly guessed letters displayed
-# [x] be sure to send every user input to lowercase just in case of auto-caps
-# [x] if initial input isn't Y or N, throw an error
-# [x] if user guess is correct, display answer_dashes but replace dashes with correct letters guessed
-# [x] if guess input is a number, throw an error
-# [x] display congratulations message on whole word success, better luck next time on failure
-# [x] ask if user would like to play again; if yes, loop, if no, break loop
-# [x] test functionality, check for line spacing
-# [x] comment all the things
-# [x] add more words to word_bank
-# [x] store guessed wrong letters and display
-# [x] check if guess is already in temp_answer (you already guessed that!) (potentially combine with previous checklist item)
-
-
 import random
 from words import *
 
@@ -66,7 +47,7 @@ def end_of_game():
             except ValueError as err:
                 print("{}".format(err))
 
-        # If they enter some inane value, error throws
+        # If they enter some arbitrary value, error throws
         else:
             user_continue = False
             raise ValueError("Oops, please enter either Y or N!\n")
@@ -96,27 +77,21 @@ while main_loop == True:
                 answer_dashes = "-" * len(answer)
                 attempts = 0
 
-
                 # Conditional to begin game
                 if start == "y":
 
                     # Answer length check to determine user's number of guess attempts
                     if len(answer) <= 5:
                         attempts = 10
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
                     elif 5 < len(answer) <= 10:
                         attempts = 15
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
                     elif 10 < len(answer) <= 15:
                         attempts = 20
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
                     else:
                         attempts = 25
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
+
+                    print_divider()
+                    print("You have {} attempts left.\n".format(attempts))
 
                     # Nested loop for guessing letters, based on number of remaining attempts
                     win = False
