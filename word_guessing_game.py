@@ -103,20 +103,15 @@ while main_loop == True:
                     # Answer length check to determine user's number of guess attempts
                     if len(answer) <= 5:
                         attempts = 10
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
                     elif 5 < len(answer) <= 10:
                         attempts = 15
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
                     elif 10 < len(answer) <= 15:
                         attempts = 20
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
                     else:
                         attempts = 25
-                        print_divider()
-                        print("You have {} attempts left.\n".format(attempts))
+                        
+                    print_divider()
+                    print("You have {} attempts left.\n".format(attempts))
 
                     # Nested loop for guessing letters, based on number of remaining attempts
                     win = False
