@@ -6,14 +6,32 @@ import random
 from words import *
 
 
-# Initial variable declarations to keep loops in line
+# Initial variable declarations
 win = False
 main_loop = True
+previous_answer = ""
 
 
-# Simple function to visually divide each guess
+# Visually divides each guess
 def print_divider():
-    print("\n||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n")
+    print("\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n")
+
+
+# Displays array of guessed letters to user
+def you_have_tried():
+    print("You have tried {}\n".format(guessed_letters))
+
+
+# Tells user they've already guessed a letter, whether correct or incorrect
+def already_guessed():
+    print("You already guessed that one! You have {} attempts left.\n".format(attempts))
+    you_have_tried()
+
+
+# Gathers guessed letters into a list and sorts alphabetically
+def sort_guesses():
+    guessed_letters.append(guess)
+    guessed_letters.sort()
 
 
 # Function that runs at end of game, accessed by changing win conditions
@@ -23,8 +41,13 @@ def end_of_game():
     global main_loop
     global user_continue
     global keep_going
+    global previous_answer
 
-    keep_going = input("Would you like to keep going? Y/N\n").lower()
+    keep_going = input("Would you like to keep going? Y/N\n").lower().replace(" ", "")
+
+    # Checks for "recursion" answer for easter egg ;)
+    if answer == "recursion":
+        previous_answer = answer
 
     try:
         if keep_going.isalpha() and (keep_going == "y" or keep_going == "n"):
@@ -63,7 +86,7 @@ print("Hello! Let's play a word game!\n")
 while main_loop == True:
 
     # Initial input to start the game
-    start = input("Please press Y to begin or N to quit, followed by Enter/Return to confirm.\n").lower()
+    start = input("Please press Y to begin or N to quit, followed by Enter/Return to confirm.\n").lower().replace(" ", "")
     user_continue = True
 
     try:
@@ -72,8 +95,13 @@ while main_loop == True:
             # Loop that controls game after initial start input is received
             while user_continue == True:
 
-                # Initial variable declarations
-                answer = random.choice(word_bank)
+                # Sets answer as "recursion" if previous_answer was assigned "recursion"
+                if previous_answer == "recursion":
+                    answer = "recursion"
+                else:
+                    answer = random.choice(word_bank)
+
+                # Initial in-game variable declarations
                 answer_dashes = "-" * len(answer)
                 attempts = 0
 
@@ -102,7 +130,7 @@ while main_loop == True:
 
                         try:
                             print(temp_answer)
-                            guess = input("\nGuess a letter, or guess the whole word!\n").lower()
+                            guess = input("\nGuess a letter, or guess the whole word!\n").lower().replace(" ", "")
 
                             # Ensures guess is comprised of letters
                             if guess.isalpha():
@@ -144,16 +172,15 @@ while main_loop == True:
                                             # Tells user they've already guessed a correct letter if they try it again
                                             elif guess in guessed_letters:
                                                 print_divider()
-                                                print("You already guessed that one!\n")
-                                                print("You have tried {}\n".format(guessed_letters))
+                                                already_guessed()
 
                                             # Adds guess to guessed_letters list and continues loop
                                             else:
                                                 number_of_tries += 1
                                                 print_divider()
-                                                print("Nice work, keep going!\n")
-                                                guessed_letters.append(guess)
-                                                print("You have tried {}\n".format(guessed_letters))
+                                                print("Nice work, keep going! You have {} attempts left.\n".format(attempts))
+                                                sort_guesses()
+                                                you_have_tried()
 
                                         # If their guess is the whole word, immediate win
                                         elif guess == answer:
@@ -164,14 +191,14 @@ while main_loop == True:
                                         # If they have already guessed a letter, it will tell them
                                         elif guess in guessed_letters:
                                             print_divider()
-                                            print("You already guessed that one!\n")
+                                            already_guessed()
 
                                         # If their guess doesn't appear in answer, they lose an attempt
                                         else:
 
                                             # If their guess is a single character and not in the answer or the guessed_letters list, it is added to the list
                                             if len(guess) == 1 and not len(guess) == len(answer) and guess not in guessed_letters:
-                                                guessed_letters.append(guess)
+                                                sort_guesses()
 
                                             # Removes an attempt with extra flavor text based on amount of remaining attempts
                                             number_of_tries += 1
@@ -179,11 +206,11 @@ while main_loop == True:
                                             if attempts > 1:
                                                 print_divider()
                                                 print("Oops! You have {} attempts left.\n".format(attempts))
-                                                print("You have tried {}\n".format(guessed_letters))
+                                                you_have_tried()
                                             elif attempts == 1:
                                                 print_divider()
                                                 print("Careful, you only have {} attempt left!\n".format(attempts))
-                                                print("You have tried {}\n".format(guessed_letters))
+                                                you_have_tried()
                                             else:
                                                 print_divider()
                                                 print("Oh no, you're out of attempts!\nThe answer was \"{}\". Please try again!\n".format(answer))
@@ -191,7 +218,7 @@ while main_loop == True:
 
                                     else:
                                         print_divider()
-                                        raise ValueError("Oops, you can only enter a single letter or the exact length of the word!\nThe length of the word is represented by the dashes.\n")
+                                        raise ValueError("Oops, you can only enter a single letter or the exact length of the word!\nThe length of the word is represented by the dashes.\n\nYou have {} attempts left.\n".format(attempts))
 
                                 except ValueError as err:
                                     print("{}\nYou have tried {}\n".format(err, guessed_letters))
@@ -199,7 +226,7 @@ while main_loop == True:
 
                             else:
                                 print_divider()
-                                raise ValueError("Please enter letters only!\n")
+                                raise ValueError("Please enter letters only! You have {} attempts left.\n".format(attempts))
 
                         except ValueError as err:
                             print("{}\nYou have tried {}\n".format(err, guessed_letters))
@@ -215,7 +242,7 @@ while main_loop == True:
                 # If win_condition is met, function at top of program is called, prompting replay
                 if win == True:
                     print_divider()
-                    print("Ding ding ding! The answer was \"{}\"!\nIt took you {} attempts to guess the answer.\nCongratulations, you win!\n".format(answer, number_of_tries))
+                    print("Ding ding ding! The answer was \"{}\"!\nIt took you {} tries to guess the answer.\nCongratulations, you win!\n".format(answer, number_of_tries))
                     end_of_game()
 
         else:
