@@ -2,6 +2,13 @@
 # LAPTOP GIT PATH   cd c/users/e/projects/programming/projects/python/02_word_guessing_game/main
 
 
+# To-Do:
+
+# Check out possible error code rework commented out at bottom
+# Look for more potential modularization
+
+
+
 import random
 from words import *
 
@@ -32,6 +39,16 @@ def already_guessed():
 def sort_guesses():
     guessed_letters.append(guess)
     guessed_letters.sort()
+
+
+# Checks for >1 or ==1 attempts remaining in order to display a grammatically correct warning message
+def remove_attempt():
+    if attempts > 1:
+        print("Oops! You have {} attempts left.\n".format(attempts))
+        you_have_tried()
+    elif attempts == 1:
+        print("Careful, you only have {} attempt left!\n".format(attempts))
+        you_have_tried()
 
 
 # Function that runs at end of game, accessed by changing win conditions
@@ -203,16 +220,10 @@ while main_loop == True:
                                             # Removes an attempt with extra flavor text based on amount of remaining attempts
                                             number_of_tries += 1
                                             attempts -= 1
-                                            if attempts > 1:
-                                                print_divider()
-                                                print("Oops! You have {} attempts left.\n".format(attempts))
-                                                you_have_tried()
-                                            elif attempts == 1:
-                                                print_divider()
-                                                print("Careful, you only have {} attempt left!\n".format(attempts))
-                                                you_have_tried()
+                                            print_divider()
+                                            if attempts >= 1:
+                                                remove_attempt()
                                             else:
-                                                print_divider()
                                                 print("Oh no, you're out of attempts!\nThe answer was \"{}\". Please try again!\n".format(answer))
                                                 end_of_game()
 
@@ -222,6 +233,8 @@ while main_loop == True:
 
                                 except ValueError as err:
                                     print("{}\nYou have tried {}\n".format(err, guessed_letters))
+                                    # print("{}\n".format(err))
+                                    # already_guessed()
 
 
                             else:
