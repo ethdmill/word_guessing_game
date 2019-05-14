@@ -103,11 +103,11 @@ print("Hello! Let's play a word game!\n")
 while main_loop == True:
 
     # Initial input to start the game
-    start = input("Please press Y to begin or N to quit, followed by Enter/Return to confirm.\n").lower().replace(" ", "")
+    start = input("Please press Y to begin, N to quit, or R to view the rules, followed by Enter/Return to confirm.\n").lower().replace(" ", "")
     user_continue = True
 
     try:
-        if start.isalpha() and (start == "y" or start == "n"):
+        if start.isalpha() and (start == "y" or start == "n" or start == "r"):
 
             # Loop that controls game after initial start input is received
             while user_continue == True:
@@ -121,6 +121,21 @@ while main_loop == True:
                 # Initial in-game variable declarations
                 answer_dashes = "-" * len(answer)
                 attempts = 0
+
+                # Gameplay/Rules section, only displayed if chosen
+                if start == "r":
+                    print_divider();
+                    print("HOW TO PLAY:\n\n"
+                    "The rules are simple! A word will be selected at random.\n" +
+                    "You will have a set number of attempts to guess the word.\n" +
+                    "The word will be displayed, hidden by a corresponding amount of dashes.\n" +
+                    "You can guess one letter at a time, or the whole word at once.\n" +
+                    "To enter a guess, type in your letter/word and press enter.\n" +
+                    "If you guess a letter correctly, you don't lose any attempts.\n" +
+                    "However, if you guess wrong, you lose an attempt!\n" +
+                    "\nBe careful! If you run out of guesses, it's game over!")
+                    print_divider();
+                    break
 
                 # Conditional to begin game
                 if start == "y":
@@ -259,7 +274,7 @@ while main_loop == True:
                     end_of_game()
 
         else:
-            raise ValueError("Oops, please enter either Y or N!\n")
+            raise ValueError("\nOops, please enter either Y, N, or R!\n")
 
     except ValueError as err:
         print("{}".format(err))
