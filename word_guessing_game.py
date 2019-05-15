@@ -2,13 +2,6 @@
 # LAPTOP GIT PATH   cd c/users/e/projects/programming/projects/python/02_word_guessing_game/main
 
 
-# To-Do:
-
-# Check out possible error code rework commented out at bottom
-# Look for more potential modularization
-
-
-
 import random
 from words import *
 
@@ -145,10 +138,8 @@ while main_loop == True:
                         attempts = 10
                     elif 5 < len(answer) <= 10:
                         attempts = 15
-                    elif 10 < len(answer) <= 15:
-                        attempts = 20
                     else:
-                        attempts = 25
+                        attempts = 20
 
                     print_divider()
                     print("You have {} attempts left.\n".format(attempts))
@@ -248,8 +239,6 @@ while main_loop == True:
 
                                 except ValueError as err:
                                     print("{}\nYou have tried {}\n".format(err, guessed_letters))
-                                    # print("{}\n".format(err))
-                                    # already_guessed()
 
 
                             else:
