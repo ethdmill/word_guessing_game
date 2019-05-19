@@ -52,41 +52,38 @@ def end_of_game():
     global user_continue
     global keep_going
     global previous_answer
+    end_of_game_loop = True
 
-    keep_going = input("Would you like to keep going? Y/N\n").lower().replace(" ", "")
+    while end_of_game_loop == True:
 
-    # Checks for "recursion" answer for easter egg ;)
-    if answer == "recursion":
-        previous_answer = answer
+        keep_going = input("Would you like to keep going? Y/N\n").lower().replace(" ", "")
 
-    try:
-        if keep_going.isalpha() and (keep_going == "y" or keep_going == "n"):
+        # Checks for "recursion" answer for easter egg ;)
+        if answer == "recursion":
+            previous_answer = answer
 
-            try:
+        try:
+            if keep_going.isalpha() and (keep_going == "y" or keep_going == "n"):
+
                 # If they want to continue, loop restarts
                 if keep_going == "y":
                     user_continue = True
+                    end_of_game_loop = False
 
                 # If they don't want to continue, loop breaks, program ends
                 elif keep_going == "n":
                     print("Thanks for playing!")
                     user_continue = False
                     main_loop = False
+                    end_of_game_loop = False
 
-                else:
-                    user_continue = False
-                    raise ValueError("Oops, please enter either Y or N!\n")
+            # If they enter some arbitrary value, error throws
+            else:
+                user_continue = False
+                raise ValueError("Oops, please enter either Y or N!\n")
 
-            except ValueError as err:
-                print("{}".format(err))
-
-        # If they enter some arbitrary value, error throws
-        else:
-            user_continue = False
-            raise ValueError("Oops, please enter either Y or N!\n")
-
-    except ValueError as err:
-        print("{}".format(err))
+        except ValueError as err:
+            print("{}".format(err))
 
 
 # Start-up message
@@ -96,11 +93,11 @@ print("Hello! Let's play a word game!\n")
 while main_loop == True:
 
     # Initial input to start the game
-    start = input("Please press Y to begin, N to quit, or R to view the rules, followed by Enter/Return to confirm.\n").lower().replace(" ", "")
+    start = input("Please press S to start, Q to quit, or R to view the rules, followed by Enter/Return to confirm.\n").lower().replace(" ", "")
     user_continue = True
 
     try:
-        if start.isalpha() and (start == "y" or start == "n" or start == "r"):
+        if start.isalpha() and (start == "s" or start == "q" or start == "r"):
 
             # Loop that controls game after initial start input is received
             while user_continue == True:
@@ -131,7 +128,7 @@ while main_loop == True:
                     break
 
                 # Conditional to begin game
-                if start == "y":
+                if start == "s":
 
                     # Answer length check to determine user's number of guess attempts
                     if len(answer) <= 5:
@@ -176,7 +173,7 @@ while main_loop == True:
                                                 # This stores the index of every guess in answer as guess_position once per iteration without repeating indeces
                                                 guess_position = answer.find(guess, guess_position + 1)
 
-                                                # Replaces any applicable - characters with guess
+                                                # Replaces any applicable "-" characters with letter stored in guess
                                                 if guess_position != -1 and guess == answer[guess_position]:
                                                     temp_answer[guess_position] = guess
 
@@ -209,7 +206,6 @@ while main_loop == True:
                                         elif guess == answer:
                                             number_of_tries += 1
                                             win = True
-                                            break
 
                                         # If they have already guessed a letter, it will tell them
                                         elif guess in guessed_letters:
@@ -250,7 +246,7 @@ while main_loop == True:
 
 
                 # Exit message if user selected N at very beginning
-                elif start == "n":
+                elif start == "q":
                     print("Come back soon!")
                     main_loop = False
                     break
