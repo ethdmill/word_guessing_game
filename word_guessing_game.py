@@ -131,9 +131,7 @@ while main_loop == True:
                 if start == "s":
 
                     # Answer length check to determine user's number of guess attempts
-                    if len(answer) <= 5:
-                        attempts = 10
-                    elif 5 < len(answer) <= 10:
+                    if len(answer) <= 10:
                         attempts = 15
                     else:
                         attempts = 20
