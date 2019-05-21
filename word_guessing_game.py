@@ -3,6 +3,7 @@
 
 
 import random
+# import os (need for clear_screen() below)
 from words import *
 
 
@@ -12,9 +13,15 @@ main_loop = True
 previous_answer = ""
 
 
+# Clears prompt upon each guess for cleaner experience
+# Commented out for potential future use based on test feedback
+# def clear_screen():
+#     os.system("cls")
+
+
 # Visually divides each guess
 def print_divider():
-    print("\n|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n")
+    print("\n" + ("|" * 100) + "\n")
 
 
 # Displays array of guessed letters to user
@@ -58,7 +65,7 @@ def end_of_game():
 
         keep_going = input("Would you like to keep going? Y/N\n").lower().replace(" ", "")
 
-        # Checks for "recursion" answer for easter egg ;)
+        # Checks for "recursion" answer from previous game iteration for easter egg ;)
         if answer == "recursion":
             previous_answer = answer
 
@@ -72,7 +79,9 @@ def end_of_game():
 
                 # If they don't want to continue, loop breaks, program ends
                 elif keep_going == "n":
+                    print_divider()
                     print("Thanks for playing!")
+                    print_divider()
                     user_continue = False
                     main_loop = False
                     end_of_game_loop = False
@@ -103,6 +112,7 @@ while main_loop == True:
             while user_continue == True:
 
                 # Sets answer as "recursion" if previous_answer was assigned "recursion"
+                # If so, this also permanently sets the answer as "recursion" from then on until the user exits the program
                 if previous_answer == "recursion":
                     answer = "recursion"
                 else:
@@ -227,6 +237,7 @@ while main_loop == True:
                                                 print("Oh no, you're out of attempts!\nThe answer was \"{}\". Please try again!\n".format(answer))
                                                 end_of_game()
 
+
                                     else:
                                         print_divider()
                                         raise ValueError("Oops, you can only enter a single letter or the exact length of the word!\nThe length of the word is represented by the dashes.\n\nYou have {} attempts left.\n".format(attempts))
@@ -245,7 +256,9 @@ while main_loop == True:
 
                 # Exit message if user selected N at very beginning
                 elif start == "q":
+                    print_divider()
                     print("Come back soon!")
+                    print_divider()
                     main_loop = False
                     break
 
@@ -256,8 +269,10 @@ while main_loop == True:
                     print("Ding ding ding! The answer was \"{}\"!\nIt took you {} tries to guess the answer.\nCongratulations, you win!\n".format(answer, number_of_tries))
                     end_of_game()
 
+
         else:
-            raise ValueError("\nOops, please enter either Y, N, or R!\n")
+            print_divider()
+            raise ValueError("Oops, please enter either S, Q, or R!\n")
 
     except ValueError as err:
         print("{}".format(err))
